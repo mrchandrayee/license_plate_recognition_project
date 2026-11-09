@@ -1,0 +1,57 @@
+# Update model paths and class names to match your trained models.
+run:
+  mode: full                 # full | detect
+  source: assets/input.mp4
+  output: runs/alpr
+  show: true
+  save_video: true
+  device: null               # 0, cpu, mps, or null
+  imgsz: 960
+  confidence: 0.25
+  iou: 0.45
+  half: false
+  max_det: 100
+
+detector:
+  type: yolo
+  vehicle_weights: weights/vehicle.pt
+  plate_weights: weights/plate.pt
+  vehicle_classes: [car, truck, bus, motorcycle]
+  plate_confidence: 0.25
+  plate_imgsz: 960
+  plate_max_det: 30
+
+tracker:
+  type: bytetrack
+  max_age: 30
+  min_hits: 2
+  high_thresh: 0.5
+  low_thresh: 0.1
+  match_thresh: 0.8
+  trail_length: 20
+
+alpr:
+  ocr_engine: easyocr        # easyocr | tesseract
+  ocr_cache: once             # once | frame
+  plate_scope: vehicle-crop   # vehicle-crop | full-frame
+  ocr_confidence: 0.25
+  crop_padding: 0.08
+  ocr_lang: en
+  vehicle_padding: 0.05
+  detection_zone: null        # [[x,y], [x,y], ...]
+  capture_line: null          # [[x1,y1], [x2,y2]]
+  capture_direction: both     # both | left-to-right | right-to-left
+  movement_line: null
+  show_detection_zone: true
+  show_labels: true
+  bbox_style: corners
+  track_anchor: bottom
+  hud:
+    panel_x: 8
+    panel_y: 8
+    panel_width: 320
+    panel_height: null
+    title: Plates
+    max_cards: 6
+    show_status_polygon: true
+    status_polygon: [[12,12], [620,12], [620,120], [12,120]]
